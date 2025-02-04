@@ -33,6 +33,7 @@ public class TurnDegrees extends Command {
     // Set motors to stop, read encoder values for starting point
     m_drive.arcadeDrive(0, 0);
     m_drive.resetEncoders();
+    m_drive.encoderTurn();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

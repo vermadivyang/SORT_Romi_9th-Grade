@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.romi.RomiGyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
-  private static final double kCountsPerRevolution = 1440.0;
-  private static final double LONGkCountsPerRevolution = 1430.0;
+  private static final double kCountsPerRevolution = 520;//OLD: 1440.0 ; 1393.5
   private static final double kWheelDiameterInch = 2.75591; // 70 mm
+
+  private double targetHeading;
 
   // The Romi has the left and right motors set to
   // PWM channels 0 and 1 respectively
@@ -49,13 +51,61 @@ public class Drivetrain extends SubsystemBase {
 
     // Use inches as unit for encoder distances
     m_leftEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
-    m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / LONGkCountsPerRevolution);
+    m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / kCountsPerRevolution);
+    resetEncoders();
+    //NEW LINE
+    targetHeading = m_gyro.getAngleZ();
+
+  }
+
+
+  public void encoderTurn() {
+    m_leftEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / 1388.0);
+    m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / 1388.0);
     resetEncoders();
   }
 
-  public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
+  public void encoderDrive() {
+    m_leftEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / 520.0);
+    m_rightEncoder.setDistancePerPulse((Math.PI * kWheelDiameterInch) / 520.0);
+    resetEncoders();
+  }
+
+
+  /*public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
+    m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
+
+  }*/
+
+  ///* 
+   public void arcadeDrive(double xaxisSpeed, double zaxisRotate) {
+    m_gyro.reset();
+    if (Math.abs(zaxisRotate) > Constants.Z_AXIS_ROTATE_DEADBAND_VALUE) {
+      targetHeading = m_gyro.getAngleZ();
+    }
+    
+    double gyroAdjust = getGyroAdjustment();
+    zaxisRotate -= gyroAdjust;
+
     m_diffDrive.arcadeDrive(xaxisSpeed, zaxisRotate);
   }
+
+  private double getGyroAdjustment() {
+    double headingDifference = m_gyro.getAngleZ() - targetHeading;
+    headingDifference %= 360;
+
+    if (headingDifference <- 180) {
+      headingDifference += 360;
+    }
+
+    if (headingDifference > 180) {
+      headingDifference -= 360;
+    }
+
+    double gyroAdjust = headingDifference * Constants.GYRO_ADJUST_SCALE_COEFFICIENT;
+
+    return gyroAdjust;
+  }//*/
 
   public void resetEncoders() {
     m_leftEncoder.reset();
@@ -78,7 +128,7 @@ public class Drivetrain extends SubsystemBase {
     return m_rightEncoder.getDistance();
   }
 
-  public double getAverageDistanceInch() {
+  public double getAverageDistanceInch() { 
     return (getLeftDistanceInch() + getRightDistanceInch()) / 2.0;
   }
 

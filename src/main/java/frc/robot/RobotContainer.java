@@ -7,8 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.AA_MainAutoExample;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutonomousDistance;
+import frc.robot.commands.ForwardTester;
+import frc.robot.commands.TurnTester;
 import frc.robot.commands.AutonomousTime;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.romi.OnBoardIO;
@@ -62,22 +65,28 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default command is arcade drive. This will run unless another command
     // is scheduled over it.
-    m_drivetrain.setDefaultCommand(getArcadeDriveCommand());
+
+    //m_drivetrain.setDefaultCommand(getArcadeDriveCommand());
 
     // Example of how to use the onboard IO
     Trigger onboardButtonA = new Trigger(m_onboardIO::getButtonAPressed);
     onboardButtonA
-        .onTrue(new AutonomousDistance(m_drivetrain))
-        .onFalse(new PrintCommand("Button A Released || Running Auto - SORT")); 
+        .onTrue(new ForwardTester(m_drivetrain))
+        .onFalse(new PrintCommand("Button A Released || Running Auto Strait Tester- SORT")); 
     
     Trigger onboardButtonB = new Trigger(m_onboardIO::getButtonBPressed);
         onboardButtonB
-            .onTrue(new PrintCommand(info()))
-            .onFalse(new PrintCommand("Button B Released"));
+            .onTrue(new TurnTester(m_drivetrain))
+            .onFalse(new PrintCommand("Button B Released || Running Auto Rotational Tester - SORT"));
+
+    Trigger onboardButtonC = new Trigger(m_onboardIO::getButtonCPressed);
+        onboardButtonC
+            .onTrue(new AA_MainAutoExample(m_drivetrain))
+            .onFalse(new PrintCommand("Button C Released || Running Auto Test - SORT"));
 
     // Setup SmartDashboard options
-    m_chooser.setDefaultOption("Auto Routine Distance", new AutonomousDistance(m_drivetrain));
-    m_chooser.addOption("Auto Routine Time", new AutonomousTime(m_drivetrain));
+    m_chooser.setDefaultOption("Auto Routine Distance", new AA_MainAutoExample(m_drivetrain));
+    m_chooser.addOption("Auto Routine Time", new AA_MainAutoExample(m_drivetrain));
     SmartDashboard.putData(m_chooser);
   }
 
@@ -87,24 +96,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
 
-   public String info(){
-    String d = "No info found";
-    double AverageDistance =  m_drivetrain.getAverageDistanceInch();
-    double RightDistance = m_drivetrain.getRightDistanceInch();
-    double LeftDistance =  m_drivetrain.getLeftDistanceInch();
-
-    String AD = Double.toString(AverageDistance);
-    String RD = Double.toString(RightDistance);
-    String LD = Double.toString(LeftDistance);
-
-    if (0==0) {
-
-    d = "INFORMATION DATA|| Average Distance : " + AD + " | Right Distance : " + RD + " | Left Distance : " + LD;
-
-    }
-    
-    return d;
-   }
+   
   public Command getAutonomousCommand() {
     return m_chooser.getSelected();
   }
@@ -114,8 +106,7 @@ public class RobotContainer {
    *
    * @return the command to run in teleop
    */
-  public Command getArcadeDriveCommand() {
-    return new ArcadeDrive(
-        m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(2));
-  }
+ /*  public Command getArcadeDriveCommand() {
+    return new ArcadeDrive( m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(2));
+  }*/
 }

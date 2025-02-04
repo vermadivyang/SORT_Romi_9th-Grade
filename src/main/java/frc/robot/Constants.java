@@ -12,4 +12,9 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {}
+public final class Constants {
+
+    public static final double GYRO_ADJUST_SCALE_COEFFICIENT = .01;
+    public static final double Z_AXIS_ROTATE_DEADBAND_VALUE = .1;
+
+}
