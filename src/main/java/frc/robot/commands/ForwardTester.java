@@ -16,8 +16,22 @@ public class ForwardTester extends SequentialCommandGroup {
    */
   public ForwardTester(Drivetrain drivetrain) {
     addCommands(
-        new DriveDistance(0.5, 30, drivetrain)
+        new DriveDistance(0.45, 30, drivetrain)
 
         );
+        /* 
+         * 0.65 = 27.6
+         * 0.6 = 27.9
+         * 0.55 = 29.55
+         * 0.5 = 29.75
+         * 0.45 = 29.9
+         * 0.4 = 31.6
+         * 0.3 = 32.12
+         * 0.2 = 0.
+         * 0.1 = 0.
+         * --------
+         * 30 cm
+         * 
+         */
   }
 }

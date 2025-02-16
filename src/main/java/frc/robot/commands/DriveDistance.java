@@ -17,11 +17,11 @@ public class DriveDistance extends Command {
    * a desired speed.
    *
    * @param speed The speed at which the robot will drive
-   * @param inches The number of inches the robot will drive
+   * @param cm The number of inches the robot will drive
    * @param drive The drivetrain subsystem on which this command will run
    */
-  public DriveDistance(double speed, double inches, Drivetrain drive) {
-    m_distance = inches;
+  public DriveDistance(double speed, double cm, Drivetrain drive) {
+    m_distance = cm;
     m_speed = speed;
     m_drive = drive;
     addRequirements(drive);
@@ -32,7 +32,6 @@ public class DriveDistance extends Command {
   public void initialize() {
     m_drive.arcadeDrive(0, 0);
     m_drive.resetEncoders();
-    m_drive.encoderDrive();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

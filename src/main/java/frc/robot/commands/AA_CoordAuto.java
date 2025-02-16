@@ -29,10 +29,10 @@ public class AA_CoordAuto extends SequentialCommandGroup {
   public AA_CoordAuto(Drivetrain drivetrain) {
     //Init
     StartPos(0.5,3,90);
-    Wait(1, drivetrain);
 
     //Program Here
     moveToForwards(1,3,drivetrain);
+    moveToForwards(2,4,drivetrain);
     Turn(0.4,180,drivetrain);
     Forward(0.5,25,drivetrain);
 

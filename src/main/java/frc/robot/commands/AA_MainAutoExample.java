@@ -15,7 +15,6 @@ public class AA_MainAutoExample extends SequentialCommandGroup {
    * @param drivetrain The drivetrain subsystem on which this command will run
    */
   public AA_MainAutoExample(Drivetrain drivetrain) {
-    Wait(1, drivetrain);
     Forward(0.5,30,drivetrain);
     Turn(0.4,180,drivetrain);
     Forward(0.5,30,drivetrain);
@@ -29,12 +28,12 @@ public class AA_MainAutoExample extends SequentialCommandGroup {
   public void Forward(double speed, double cm, Drivetrain drivetrain){
     addCommands(
       new DriveDistance(speed, cm, drivetrain));
-      Wait(0.5, drivetrain);
+      Wait(1, drivetrain);
   }
   public void Turn(double speed, double degrees, Drivetrain drivetrain){
     addCommands(
       new TurnDegrees(speed, degrees, drivetrain));
-      Wait(0.5, drivetrain);
+      Wait(1, drivetrain);
   }
   public void Wait(double second, Drivetrain drivetrain){
     addCommands(
